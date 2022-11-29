@@ -53,7 +53,7 @@ class ProductController extends Controller
             file_put_contents($path . $filename, $image);
 
             // 
-            $post_image = 'data_image_product/' . $filename;
+            $post_image = 'data_image_product/' . $filename; 
 
             $product = new Product();
             $product->id_category = $request->input('id_category');
@@ -120,9 +120,22 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function showbyid($id)
     {
-        //
+        $product = Product::where('id', $id)->orderBy('updated_at', 'DESC')
+        ->get();
+        if ($product) {
+            return response()->json([
+                'status'    => 200,
+                'message'   => 'Data yang ditemukan',
+                'data'      => $product
+            ], 200);
+        } else {
+            return response()->json([
+                'status'    => 404,
+                'message'   => 'id produk ' . $id . ' tidak ditemukan'
+            ], 404);
+        }
     }
 
     /**
